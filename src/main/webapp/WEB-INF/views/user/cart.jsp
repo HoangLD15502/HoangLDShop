@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop</title>
+    <base href="/">
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <!-- fontawesome -->
@@ -36,17 +38,43 @@
                     <a class="nav-link active" href="cart"><i class="fa-solid fa-cart-shopping"></i> Giỏ hàng</a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-user"></i> Tài khoản
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                    data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-user"></i>
+                    <c:choose>
+                    	<c:when test="${empty sessionScope.account}">
+                    		Tài khoản
+                    	</c:when>
+                    	<c:otherwise>
+                    		${sessionScope.account.username}
+                    	</c:otherwise>
+                    </c:choose>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="sign-in"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
-                    <a class="dropdown-item" href="sign-up"><i class="fa-solid fa-user-plus"></i> Đăng ký</a>
-                    <a class="dropdown-item" href="forgot"><i class="fa-solid fa-key"></i> Quên mật khẩu</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="sign-in"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
-                    <a class="dropdown-item" href="change"><i class="fa-solid fa-rotate"></i> Đổi mật khẩu</a>
-                    <a class="dropdown-item" href="profile"><i class="fa-solid fa-address-card"></i> Cập nhật hồ sơ</a>
+                  	<c:choose>
+                    	<c:when test="${empty sessionScope.account}">
+                    		<a class="dropdown-item" href="sign-in">
+                    			<i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+                   			</a>
+                   			<a class="dropdown-item" href="sign-up">
+                    			<i class="fa-solid fa-right-to-bracket"></i> Đăng ký
+                   			</a>
+                    		<a class="dropdown-item" href="forgot">
+                    			<i class="fa-solid fa-key"></i> Quên mật khẩu
+                    		</a>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<a class="dropdown-item" href="sign-out">
+                    			<i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                   			</a>
+                    		<a class="dropdown-item" href="change">
+                    			<i class="fa-solid fa-rotate"></i> Đổi mật khẩu
+                   			</a>
+                   			<a class="dropdown-item" href="profile">
+                    			<i class="fa-solid fa-rotate"></i> Hồ sơ
+                   			</a>
+                    	</c:otherwise>
+                    </c:choose>
                   </div>
                 </li>
                </ul>
@@ -64,32 +92,29 @@
                         <th>Đơn giá</th>
                         <th>Số lượng</th>
                         <th>Số tiền</th>
-                        <th>Trạng thái</th>
                         <th></th>
                     </tr>
-                    <tr>
-                        <td>iPhone 13 Pro Max</td>
-                        <td>999</td>
-                        <td class="text-center">
-                            <li class="list-inline-item">
-                                <span class="btn btn-default" id="btn-minus">-</span>
-                            </li>
-                            <li class="list-inline-item">
-                                <span class="btn bg-default" id="var-value">1</span>
-                            </li>
-                            <li class="list-inline-item">
-                                <span class="btn btn-default" id="btn-plus">+</span>
-                            </li>
-                        </td>
-                        <td>999</td>
-                        <td>Đang vận chuyển</td>
-                        <td>
-                            <a href="#">Xóa</a>
-                        </td>
-                    </tr>
+                    <c:forEach var="item" items="${items}">
+                    	<tr>
+	                        <td>${item.name}</td>
+	                        <td>${item.price}</td>
+	                        <td class="text-center">
+	                        	<form action="cart/update">
+	                        		<input type="hidden" name="productID" value="${item.productID}">
+	                            	<input type="number" class="form-control" name="quantity"
+	                            		value="${item.quantity}" onblur="this.form.submit()">
+	                        	</form>
+	                        </td>
+	                        <td>${item.price * item.quantity}</td>
+	                        <td>
+	                            <a href="cart/remove/${item.productID}">Xóa</a>
+	                        </td>
+	                    </tr>
+                    </c:forEach>
                 </table>
-                <div class="">
-                    <h3>Tổng tiền thanh toán: 999</h3>
+                <div class="form-inline">
+                    <h3>Tổng tiền thanh toán: ${total}</h3>
+                    <button class="btn btn-primary ml-2">Thanh toán</button>
                 </div>
             </div>
         </div>

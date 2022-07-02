@@ -26,22 +26,19 @@ import lombok.NoArgsConstructor;
 public class OrderDetail implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int orderDetailID;
+	private Long orderDetailID;
 	
-	@ManyToOne
-	@JoinColumn(name = "orderID")
-	private Order order;
+	@Column(nullable = false)
+	private double price;
+	
+	@Column(nullable = false)
+	private int quantity;
 	
 	@ManyToOne
 	@JoinColumn(name = "productID")
 	private Product product;
 	
-	@Column(nullable = false)
-	private int quantity;
-	
-	@Column(nullable = false)
-	private double price;
-	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private Set<OrderDetail> orderDetails;
+	@ManyToOne
+	@JoinColumn(name = "orderID")
+	private Order order;
 }

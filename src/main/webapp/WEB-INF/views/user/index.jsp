@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shop</title>
+    <base href="/">
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <!-- fontawesome -->
@@ -36,17 +38,43 @@
                     <a class="nav-link" href="cart"><i class="fa-solid fa-cart-shopping"></i> Giỏ hàng</a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-user"></i> Tài khoản
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                    data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-user"></i>
+                    <c:choose>
+                    	<c:when test="${empty sessionScope.account}">
+                    		Tài khoản
+                    	</c:when>
+                    	<c:otherwise>
+                    		${sessionScope.account.username}
+                    	</c:otherwise>
+                    </c:choose>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="sign-in"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
-                    <a class="dropdown-item" href="sign-up"><i class="fa-solid fa-user-plus"></i> Đăng ký</a>
-                    <a class="dropdown-item" href="forgot"><i class="fa-solid fa-key"></i> Quên mật khẩu</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="sign-in"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
-                    <a class="dropdown-item" href="change"><i class="fa-solid fa-rotate"></i> Đổi mật khẩu</a>
-                    <a class="dropdown-item" href="profile"><i class="fa-solid fa-address-card"></i> Cập nhật hồ sơ</a>
+                  	<c:choose>
+                    	<c:when test="${empty sessionScope.account}">
+                    		<a class="dropdown-item" href="sign-in">
+                    			<i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+                   			</a>
+                   			<a class="dropdown-item" href="sign-up">
+                    			<i class="fa-solid fa-right-to-bracket"></i> Đăng ký
+                   			</a>
+                    		<a class="dropdown-item" href="forgot">
+                    			<i class="fa-solid fa-key"></i> Quên mật khẩu
+                    		</a>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<a class="dropdown-item" href="sign-out">
+                    			<i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                   			</a>
+                    		<a class="dropdown-item" href="change">
+                    			<i class="fa-solid fa-rotate"></i> Đổi mật khẩu
+                   			</a>
+                   			<a class="dropdown-item" href="profile">
+                    			<i class="fa-solid fa-rotate"></i> Hồ sơ
+                   			</a>
+                    	</c:otherwise>
+                    </c:choose>
                   </div>
                 </li>
                </ul>
@@ -55,72 +83,55 @@
         <!-- navbar -->
 
         <!-- content -->
-        <div class="row">
-            <div class="col-2">
-                <div class="mt-2 mb-2">
-                    <h5><i class="fa-solid fa-list"></i> Tất cả danh mục</h5>
-                    <hr>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><a href="#" class="text-dark">iPhone</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">SamSung</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">Xiaomi</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">Oppo</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">Asus</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">Oneplus</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">Redmi</a></li>
-                        <li class="list-group-item"><a href="#" class="text-dark">Realme</a></li>
-                    </ul>
-                </div>
-            </div>
+		<div class="row">
+			<div class="col-2">
+				<div class="mt-2 mb-2">
+					<h5>
+						<i class="fa-solid fa-list"></i> Tất cả danh mục
+					</h5>
+					<hr>
+					<ul class="list-group list-group-flush">
+						<c:forEach var="item" items="${categories}">
+							<li class="list-group-item">
+								<a href="search/${item.name}" class="text-dark">
+									${item.name}
+								</a>
+							</li>
+						</c:forEach>
+					</ul>
+				</div>
+			</div>
 
-            <div class="col-9">
-                <div class="mt-2 mb-2">
-                    <form action="">
-                        <div class="form-inline">
-                            <input type="text" class="form-control mr-sm-3" style="width: 350px;" name="" id="" placeholder="Nhập tên sản phẩm...">
-                            <button type="submit" class="btn btn-success"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm</button>
-                        </div>
-                    </form>
-                    
-                    <div class="mt-2 mb-2">
-                        <span class="mt-2 mb-2">Sắp xếp theo: </span>
-                        <div class="row">
-                            <div class="col-3">
-                                <form action="">
-                                    <select class="form-control" name="" id="">
-                                        <option class="form-control" value="">Giá từ thấp đến cao</option>
-                                        <option class="form-control" value="">Giá từ cao đến thấp</option>
-                                    </select>
-                                </form>
-                            </div>
-                            <div class="col-3">
-                                <form action="">
-                                    <select class="form-control" name="" id="">
-                                        <option class="form-control" value="">Từ A đến Z</option>
-                                        <option class="form-control" value="">Từ Z đến A</option>
-                                    </select>
-                                </form>
-                            </div>
-                        </div>
-                        
-                    </div>
-
-                    <div class="row mt-2 mb-2">
-                        <div class="col-3 mt-2 mb-2">
-                            <a href="detail">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img class="card-img" src="images/iPhone.jpg" alt="">
-                                        <div class="text-center text-dark">iPhone 13 Pro Max</div>
-                                        <div class="text-center text-dark">$999</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+			<div class="col-9">
+				<form action="">
+					<div class="form-inline mt-2 mb-2">
+						<input type="text" class="form-control mr-sm-3"
+							style="width: 350px;" name="keyword"
+							placeholder="Nhập tên sản phẩm...">
+						<button type="submit" class="btn btn-success" formaction="search">
+							<i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+						</button>
+					</div>
+				</form>
+				<div class="row mt-2 mb-2">
+					<c:forEach var="item" items="${products}">
+						<div class="col-3 mt-2 mb-2">
+							<div class="card">
+								<div class="card-body">
+									<input type="hidden" name="productID" value="${item.productID}">
+									<img class="card-img" src="uploads/${item.image}" alt="">
+									<div class="text-center text-dark">
+										<a href="detail/${item.productID}" class="text-dark">${item.name}</a>
+									</div>
+									<div class="text-center text-dark">${item.price}VND</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+			</div>
+		</div>
+	</div>
         <!-- content -->
 
         <!-- footer -->
@@ -132,7 +143,6 @@
             <!-- Copyright -->
         </footer>
         <!-- footer -->
-    </div>
     <!-- script -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>

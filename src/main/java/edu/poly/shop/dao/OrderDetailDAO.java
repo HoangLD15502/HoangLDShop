@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import edu.poly.shop.model.OrderDetail;
 
-public interface OrderDetailDAO extends JpaRepository<OrderDetail, Integer> {
+public interface OrderDetailDAO extends JpaRepository<OrderDetail, Long> {
 
 }

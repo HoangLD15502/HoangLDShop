@@ -26,16 +26,17 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <a class="nav-link" href="account"><i class="fa-solid fa-users"></i> Tài khoản</a>
+                  <a class="nav-link active" href="account"><i class="fa-solid fa-users"></i> Tài khoản</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="category"><i class="fa-solid fa-list"></i> Danh mục</a>
+                    <a class="nav-link" href="category"><i class="fa-solid fa-list"></i> Danh mục</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="product"><i class="fa-solid fa-cart-shopping"></i> Sản phẩm</a>
                 </li>
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+                    data-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-user"></i>
                     <c:choose>
                     	<c:when test="${empty sessionScope.account}">
@@ -70,6 +71,7 @@
             </div>
         </nav>
         <!-- navbar -->
+		
 		<c:choose>
 			<c:when test="${empty sessionScope.account}">
 				<div class="text-center h3">Vui lòng đăng nhập để tiếp tục</div>
@@ -77,7 +79,7 @@
 			<c:otherwise>
 				<!-- content -->
 		        <div class="container mt-2 mb-2">
-		            <div class="text-success logo h3 mt-2 mb-2">Quản lý danh mục</div>
+		            <div class="text-success logo h3 mt-2">Quản lý tài khoản</div>
 		            <div class="text-center mt-2 mb-2">
 						<c:if test="${not empty message}">
 							<div class="alert alert-success">${message}</div>
@@ -86,57 +88,100 @@
 							<div class="alert alert-danger">${error}</div>
 						</c:if>
 					</div>
-		            <div class="">
+		            <div class="mt-2">
 		                <ul class="nav nav-tabs" id="myTab" role="tablist">
 		                    <li class="nav-item" role="presentation">
 		                      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" 
 		                        role="tab" aria-controls="home" aria-selected="true">Danh sách</a>
 		                    </li>
 		                    <li class="nav-item" role="presentation">
-		                      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" 
-		                        role="tab" aria-controls="profile" aria-selected="false">Chỉnh sửa</a>
+		                      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" 
+		                        aria-controls="profile" aria-selected="false">Chỉnh sửa</a>
 		                    </li>
-		                </ul>
-		                <div class="tab-content" id="myTabContent">
+		                  </ul>
+		                  <div class="tab-content" id="myTabContent">
 		                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 		                        <table class="table table-bordered">
 		                            <tr>
-		                                <th>ID danh mục</th>
-		                                <th>Tên Danh mục</th>
+		                                <th>Tên người dùng</th>
+		                                <th>Mật khẩu</th>
+		                                <th>Họ và tên</th>
+		                                <th>Điện thoại</th>
+		                                <th>Email</th>
+		                                <th>Quyền</th>
+		                                <th>Ngày đăng ký</th>
 		                                <th></th>
 		                            </tr>
 		                            <c:forEach var="item" items="${items}">
-			                            <tr>
-			                                <td>${item.categoryID}</td>
+			                           	<tr>
+			                                <td>${item.username}</td>
+		                                    <td>${item.password}</td>
 			                                <td>${item.name}</td>
+			                                <td>${item.phone}</td>
+			                                <td>${item.email}</td>
+		                                    <td>${item.role ? "Adminstrator" : "User"}</td>
+			                                <td>${item.signUpDate}</td>
 			                                <td>
-			                                    <a href="category/edit/${item.categoryID}">Chỉnh sửa</a>
-			                                    <a href="category/delete/${item.categoryID}">Xóa</a>
+			                                    <a href="account/edit/${item.username}">Chỉnh sửa</a>
+			                                    <a href="account/delete/${item.username}">Xóa</a>
 			                                </td>
 			                            </tr>
 		                            </c:forEach>
 		                        </table>
 		                    </div>
-		
 		                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-		                        <form class="" action="" method="get">
+		                        <form class="" action="" method="">
 		                            <div class="row">
 		                                <div class="col form-group">
-		                                    <label for="">ID danh mục</label>
-		                                    <input type="number" class="form-control" name="categoryID"
-		                                        placeholder="ID danh mục" disabled="disabled" value="${item.categoryID}">
+		                                    <label for="">Tên người dùng</label>
+		                                    <input type="text" class="form-control" name="username" 
+		                                    	placeholder="Tên người dùng" value="${item.username}">
 		                                </div>
 		                                <div class="col form-group">
-		                                    <label for="">Tên danh mục</label>
-		                                    <input type="text" class="form-control" name="name" value="${item.name}"
-		                                        placeholder="Tên danh mục">
+		                                    <label for="">Mật khẩu</label>
+		                                    <input type="password" class="form-control" name="password" 
+		                                        placeholder="Mật khẩu" value="${item.password}">
 		                                </div>
 		                            </div>
+		                            <div class="row">
+		                                <div class="col form-group">
+		                                    <label for="">Họ và tên</label>
+		                                    <input type="text" class="form-control" name="name" 
+		                                    	placeholder="Họ và tên" value="${item.name}">
+		                                </div>
+		                                <div class="col form-group">
+		                                    <label for="">Điện thoại</label>
+		                                    <input type="text" class="form-control" name="phone" 
+		                                    	placeholder="Điện thoại" value="${item.phone}">
+		                                </div>
+		                            </div>
+		
+		                            <div class="row">
+		                                <div class="col form-group">
+		                                    <label for="">Email</label>
+		                                    <input type="text" class="form-control" name="email" 
+		                                    	placeholder="Email" value="${item.email}">
+		                                </div>
+		                                <div class="col form-group">
+		                                    <label for="">Quyền</label>
+		                                    <select class="form-control" name="role" id="">
+		                                        <option value="true">Adminstrator</option>
+		                                        <option value="false">User</option>
+		                                    </select>
+		                                </div>
+		                            </div>
+		        
+		                            
+		        
 		                            <div class="form-group">
-		                                <button type="submit" class="btn btn-primary" formaction="category/save">Lưu</button>
-		                                <button type="submit" class="btn btn-warning" formaction="category/update/${item.categoryID}">Cập nhật</button>
-		                                <button type="submit" class="btn btn-danger" formaction="category/delete/${item.categoryID}">Xóa</button>
-		                                <button type="submit" class="btn btn-success" formaction="category">Hủy</button>
+		                                <button type="submit" class="btn btn-primary"
+		                                	formaction="account/save">Lưu</button>
+		                               	<button type="submit" class="btn btn-warning"
+		                                	formaction="account/update/${item.username}">Chỉnh sửa</button>
+		                                <button type="submit" class="btn btn-danger"
+		                                	formaction="account/delete/${item.username}">Xóa</button>
+		                                <button type="submit" class="btn btn-success"
+		                                	formaction="account">Hủy</button>
 		                            </div>
 		                        </form>
 		                    </div>

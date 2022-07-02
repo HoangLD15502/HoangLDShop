@@ -2,6 +2,7 @@ package edu.poly.shop.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,11 +32,7 @@ import lombok.NoArgsConstructor;
 public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int orderID;
-	
-	@ManyToOne
-	@JoinColumn(name = "customerID")
-	private Customer customer;
+	private Long orderID;
 	
 	@Temporal(TemporalType.DATE)
 	private Date orderDate;
@@ -43,8 +40,9 @@ public class Order implements Serializable {
 	@Column(nullable = false)
 	private double amount;
 	
-	@Column(nullable = false)
-	private short status;
+	@ManyToOne
+	@JoinColumn(name = "username")
+	private Account account;
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private Set<OrderDetail> orderDetails;

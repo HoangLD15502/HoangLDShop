@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@
     <div class="container-fluid">
         <!-- navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand text-success logo" href="customer">Shop</a>
+            <a class="navbar-brand text-success logo" href="account">Shop</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
@@ -24,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                  <a class="nav-link active" href="customer"><i class="fa-solid fa-users"></i> Khách hàng</a>
+                  <a class="nav-link active" href="account"><i class="fa-solid fa-users"></i> Khách hàng</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="category"><i class="fa-solid fa-list"></i> Danh mục</a>
@@ -34,15 +35,35 @@
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-user"></i> Tài khoản
+                    <i class="fa-solid fa-user"></i>
+                    <c:choose>
+                    	<c:when test="${empty sessionScope.account}">
+                    		Tài khoản
+                    	</c:when>
+                    	<c:otherwise>
+                    		${sessionScope.account.username}
+                    	</c:otherwise>
+                    </c:choose>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="sign-in"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
-                    <a class="dropdown-item" href="forgot"><i class="fa-solid fa-key"></i> Quên mật khẩu</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="sign-in"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
-                    <a class="dropdown-item" href="change"><i class="fa-solid fa-rotate"></i> Đổi mật khẩu</a>
-                    <a class="dropdown-item" href="profile"><i class="fa-solid fa-address-card"></i> Cập nhật hồ sơ</a>
+                  	<c:choose>
+                    	<c:when test="${empty sessionScope.account}">
+                    		<a class="dropdown-item" href="sign-in">
+                    			<i class="fa-solid fa-right-to-bracket"></i> Đăng nhập
+                   			</a>
+                    		<a class="dropdown-item" href="forgot">
+                    			<i class="fa-solid fa-key"></i> Quên mật khẩu
+                    		</a>
+                    	</c:when>
+                    	<c:otherwise>
+                    		<a class="dropdown-item" href="sign-out">
+                    			<i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                   			</a>
+                    		<a class="dropdown-item" href="change">
+                    			<i class="fa-solid fa-rotate"></i> Đổi mật khẩu
+                   			</a>
+                    	</c:otherwise>
+                    </c:choose>
                   </div>
                 </li>
             </div>
@@ -56,26 +77,16 @@
                     <div class="logo h1 text-success">Đăng nhập</div>
                     <div class="mb-3">
                         <label for="">Tên tài khoản</label>
-                        <input type="text" class="form-control mt-2" id="" name="username" placeholder="Tên tài khoản">
+                        <input type="text" class="form-control mt-2" name="username" placeholder="Tên tài khoản">
                     </div>
                     <div class="mb-3">
                         <label for="">Mật khẩu</label>
-                        <input type="password" class="form-control mt-2" id="" name="password" placeholder="Mật khẩu">
-                    </div>
-
-                    <div class="mb-3">
-                        <input type="checkbox" name="" id=""> Nhớ tài khoản
-                    </div>
-    
-                    <div class="row">
-                        <div class="col mt-2">
-                            <p>Bạn chưa có tài khoản ? Đăng ký tại<a href="sign-up.html"> đây</a></p>
-                        </div>
+                        <input type="password" class="form-control mt-2" name="password" placeholder="Mật khẩu">
                     </div>
     
                     <div class="row">
                         <div class="col text-end mt-2">
-                            <button type="submit" class="btn btn-success">Đăng nhập</button>
+                            <button type="submit" class="btn btn-success" formaction="signin">Đăng nhập</button>
                         </div>
                     </div>
     

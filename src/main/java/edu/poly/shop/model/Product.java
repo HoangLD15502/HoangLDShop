@@ -2,7 +2,10 @@ package edu.poly.shop.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,14 +32,12 @@ import lombok.NoArgsConstructor;
 public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int productID;
-	
-	@ManyToOne
-	@JoinColumn(name = "categoryID")
-	private Category category;
+	private Long productID;
 	
 	@Column(columnDefinition = "nvarchar(100) not null")
 	private String name;
+	
+	private String image;
 	
 	@Column(nullable = false)
 	private int price;
@@ -43,18 +45,16 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private int quantity;
 	
-	@Column(length = 200)
-	private String image;
-	
-	@Column(columnDefinition = "nvarchar(500) not null")
-	private String desciption;
-	
-	@Column(nullable = false)
-	private double discount;
+	@Column(columnDefinition = "nvarchar(255) not null")
+	private String desciption;	
 	
 	@Temporal(TemporalType.DATE)
-	private Date postingDate;
+	private Date postDate;
 	
-	@Column(nullable = false)
-	private short status;
+	@ManyToOne
+	@JoinColumn(name = "categoryID")
+	private Category category;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	private Set<OrderDetail> orderDetails; 
 }

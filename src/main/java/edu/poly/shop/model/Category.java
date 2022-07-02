@@ -1,6 +1,7 @@
 package edu.poly.shop.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,9 +25,9 @@ import lombok.NoArgsConstructor;
 public class Category implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int categoryID;
+	private Long categoryID;
 	
-	@Column(name = "category_name", length = 100, columnDefinition = "nvarchar(10) not null")
+	@Column(columnDefinition = "nvarchar(100) not null")
 	private String name;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
